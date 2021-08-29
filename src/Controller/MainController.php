@@ -6,6 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Serializer;
+use Rs\JsonLines\JsonLines;
+use App\Services\JSONLinesReader;
+use App\Services\OrderHelper;
+use App\Services\CSVHelper;
 
 class MainController extends AbstractController
 {
@@ -13,30 +18,50 @@ class MainController extends AbstractController
      * @Route("/", name="home")
      */
     public function index()
-    {
-        // return $this->json([
-            // 'message' => 'Welcome to catch challenge 1'
-            // 'path' => 'src/Controller/MainController.php',
-        // ]);
-        // $response = new Response();
+    {   
+        $jsonReader = new JSONLinesReader();
+        $ordersArray = $jsonReader -> readJSONLines('https://s3-ap-southeast-2.amazonaws.com/catch-code-challenge/challenge-1-in.jsonl');
 
-        // $response->setContent('<html><body><h1>Hello world!</h1></body></html>');
-        return $this->render('home/index.html.twig');
+        $orderHelper = new OrderHelper();
+        $orderObjectArray = $orderHelper -> generateOrders($ordersArray);
+
+        return $this->render('home/index.html.twig',[
+            'orders' => $orderObjectArray
+        ]);
     }
 
     /**
-     * @Route("/custom/{name?}", name="custom")
-     * @param Request $request
+     * @Route("/export", name="export")
      * @return Response
      */
-    public function custom(Request $request) {
-        // $response = new Response();
-        $name = $request->get('name');
+    public function export() {
+        header('Content-Type: application/csv');
+        header('Content-Disposition: attachment; filename="out.csv"');
 
-        // $response->setContent('<html><body><h1>Welcome '. $name .' </h1></body></html>');
-        // return $response;
-        return $this->render('home/custom.html.twig',[
-            'name' => $name
-        ]);
+        $list = array(
+            ['Name', 'age', 'Gender'],
+            ['Bob', 20, 'Male'],
+            ['John', 25, 'Male'],
+            ['Jessica', 30, 'Female']
+        );
+
+        $jsonReader = new JSONLinesReader();
+        $ordersArray = $jsonReader -> readJSONLines('https://s3-ap-southeast-2.amazonaws.com/catch-code-challenge/challenge-1-in.jsonl');
+
+        $orderHelper = new OrderHelper();
+        $orderObjectArray = $orderHelper -> generateOrders($ordersArray);
+
+        $csvHelper = new CSVHelper();
+        $exportableArray = $csvHelper -> generateExportableOrder($orderObjectArray);
+           
+        $fp = fopen('php://output', 'w');
+          
+        foreach ($exportableArray as $fields) {
+            fputcsv($fp, $fields);
+        }
+
+        fclose($fp);
+        $response = new Response();
+        return $response;
     }
 }

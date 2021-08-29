@@ -1,5 +1,30 @@
 {% extends('base.html.twig')%}
 
 {% block body %}
-<h1><h1>Welcome to index.html.twig</h1></h1>
+<h1>Order Summary</h1>
+<a href="{{ path('export') }}">Export to CSV</a>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Order ID</th>
+      <th scope="col">Date</th>
+      <th scope="col">Total Order Value</th>
+      <th scope="col">Average Unit Price</th>
+      <th scope="col">Total Units Count</th>
+      <th scope="col">Customer State</th>
+    </tr>
+  </thead>
+  <tbody>
+  	{% for order in orders %}
+        <tr>
+	      <th scope="row">{{order.orderId}}</th>
+	      <td>{{order.dateISO|date('Y-m-d H:i:s')}}</td>
+	      <td>{{order.totalValue}}</td>
+	      <td>{{order.averagePrice}}</td>
+	      <td>{{order.distinctUnit}}</td>
+	      <td>{{order.customer.shippingAddress.state}}</td>
+	    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
