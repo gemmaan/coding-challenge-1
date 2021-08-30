@@ -30,7 +30,7 @@ class GeneratecsvCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $io -> note('importing JSON lines...');
+        $io -> note('importing JSON linesfrom https://s3-ap-southeast-2.amazonaws.com/catch-code-challenge/challenge-1-in.jsonl...');
         $jsonReader = new JSONLinesReader();
         $ordersArray = $jsonReader -> readJSONLines('https://s3-ap-southeast-2.amazonaws.com/catch-code-challenge/challenge-1-in.jsonl');
 
