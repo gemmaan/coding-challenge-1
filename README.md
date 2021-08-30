@@ -7,3 +7,8 @@ Architecture used:
 * PHP
 * Symfony
 * PHPUnit
+
+How to run: 
+1. Clone this repository
+2. run command `composer install`
+3. start the server `symfony server:start`
