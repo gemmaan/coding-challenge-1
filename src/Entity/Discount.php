@@ -72,5 +72,4 @@ class Discount
 
         return $this;
     }
-
 }

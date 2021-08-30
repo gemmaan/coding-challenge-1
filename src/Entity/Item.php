@@ -73,7 +73,8 @@ class Item
         return $this;
     }
 
-    public function calculateTotalPrice() {
+    public function calculateTotalPrice()
+    {
         return $this->quantity * $this->unitPrice;
     }
 }

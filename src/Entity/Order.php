@@ -150,19 +150,20 @@ class Order
         return $this;
     }
 
-    public function calculateTotalValue() {
+    public function calculateTotalValue()
+    {
         $totalValue = 0;
         foreach ($this->items as $item) {
-            $itemTotalPrice = $item -> calculateTotalPrice();
+            $itemTotalPrice = $item->calculateTotalPrice();
             $totalValue = $totalValue + $itemTotalPrice;
         }
 
-        $this -> sortDiscountsByPriority();
+        $this->sortDiscountsByPriority();
         foreach ($this->discounts as $discount) {
-            $discountType = $discount -> getType();
-            $discountValue = $discount -> getValue();
+            $discountType = $discount->getType();
+            $discountValue = $discount->getValue();
 
-            if($discountType == 'PERCENTAGE') {
+            if ($discountType == 'PERCENTAGE') {
                 $discountedPrice = $totalValue * $discountValue;
                 $totalValue = $totalValue - $discountedPrice;
             } else if ($discountType == 'DOLLARS') {
@@ -184,7 +185,8 @@ class Order
         return $this;
     }
 
-    public function calculateAveragePrice() {
+    public function calculateAveragePrice()
+    {
         $totalUnit = 0;
         foreach ($this->items as $item) {
             $totalUnit = $totalUnit + $item->getQuantity();
@@ -205,7 +207,8 @@ class Order
         return $this;
     }
 
-    public function countDistinctUnit() {
+    public function countDistinctUnit()
+    {
         return count($this->items);
     }
 
@@ -245,7 +248,8 @@ class Order
         return $this;
     }
 
-    public function calculateTotalUnit() {
+    public function calculateTotalUnit()
+    {
         $totalUnit = 0;
         foreach ($this->items as $item) {
             $totalUnit = $totalUnit + $item->getQuantity();
@@ -254,14 +258,15 @@ class Order
         return $totalUnit;
     }
 
-    public function sortDiscountsByPriority() {
-        usort($this->discounts, function($a, $b) {
+    public function sortDiscountsByPriority()
+    {
+        usort($this->discounts, function ($a, $b) {
             if ($a->getPriority() == $b->getPriority()) {
                 return (0);
             }
             return (($a->getPriority() < $b->getPriority()) ? -1 : 1);
         });
-        
+
         return $this->discounts;
     }
 }

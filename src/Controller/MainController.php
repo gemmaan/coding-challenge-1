@@ -18,14 +18,14 @@ class MainController extends AbstractController
      * @Route("/", name="home")
      */
     public function index()
-    {   
+    {
         $jsonReader = new JSONLinesReader();
-        $ordersArray = $jsonReader -> readJSONLines('https://s3-ap-southeast-2.amazonaws.com/catch-code-challenge/challenge-1-in.jsonl');
+        $ordersArray = $jsonReader->readJSONLines('https://s3-ap-southeast-2.amazonaws.com/catch-code-challenge/challenge-1-in.jsonl');
 
         $orderHelper = new OrderHelper();
-        $orderObjectArray = $orderHelper -> generateOrders($ordersArray);
+        $orderObjectArray = $orderHelper->generateOrders($ordersArray);
 
-        return $this->render('home/index.html.twig',[
+        return $this->render('home/index.html.twig', [
             'orders' => $orderObjectArray
         ]);
     }
@@ -34,21 +34,22 @@ class MainController extends AbstractController
      * @Route("/export", name="export")
      * @return Response
      */
-    public function export() {
+    public function export()
+    {
         header('Content-Type: application/csv');
         header('Content-Disposition: attachment; filename="out.csv"');
 
         $jsonReader = new JSONLinesReader();
-        $ordersArray = $jsonReader -> readJSONLines('https://s3-ap-southeast-2.amazonaws.com/catch-code-challenge/challenge-1-in.jsonl');
+        $ordersArray = $jsonReader->readJSONLines('https://s3-ap-southeast-2.amazonaws.com/catch-code-challenge/challenge-1-in.jsonl');
 
         $orderHelper = new OrderHelper();
-        $orderObjectArray = $orderHelper -> generateOrders($ordersArray);
+        $orderObjectArray = $orderHelper->generateOrders($ordersArray);
 
         $csvHelper = new CSVHelper();
-        $exportableArray = $csvHelper -> generateExportableOrder($orderObjectArray);
-           
+        $exportableArray = $csvHelper->generateExportableOrder($orderObjectArray);
+
         $fp = fopen('php://output', 'w');
-          
+
         foreach ($exportableArray as $fields) {
             fputcsv($fp, $fields);
         }

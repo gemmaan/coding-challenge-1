@@ -4,11 +4,13 @@ namespace App\Services;
 
 use Rs\JsonLines\JsonLines;
 
-class JSONLinesReader {
-	public function readJSONLines(string $url) {
+class JSONLinesReader
+{
+	public function readJSONLines(string $url)
+	{
 		$ordersJsonString = (new JsonLines())->delineFromFile($url);
-        $ordersArray = json_decode($ordersJsonString, true);
+		$ordersArray = json_decode($ordersJsonString, true);
 
-        return $ordersArray;
+		return $ordersArray;
 	}
 }

@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
-class CSVHelper {
-	public function generateExportableOrder(array $orderArray) {
-		$exportableArray = array(['order_id', 'order_datetime', 'total_order_value','average_unit_price', 'distinct_unit_count', 'total_units_count', 'customer_state']);
+class CSVHelper
+{
+	public function generateExportableOrder(array $orderArray)
+	{
+		$exportableArray = array(['order_id', 'order_datetime', 'total_order_value', 'average_unit_price', 'distinct_unit_count', 'total_units_count', 'customer_state']);
 
 		foreach ($orderArray as $order) {
 			$orderId = $order->getOrderId();
@@ -15,7 +17,7 @@ class CSVHelper {
 			$distinctUnit = $order->getDistinctUnit();
 			$customerState = $order->getCustomer()->getShippingAddress()->getState();
 
-			if($totalValue != 0) {
+			if ($totalValue != 0) {
 				array_push($exportableArray, [$orderId, $orderDatetime, $totalValue, $averagePrice, $distinctUnit, $totalUnit, $customerState]);
 			}
 		}

@@ -11,15 +11,17 @@ use App\Entity\Order;
 use App\Entity\Discount;
 use \DateTime;
 
-class OrderHelper {
-	public function generateOrders(array $ordersArray) {
-		$orderObjectArray = array();
+class OrderHelper
+{
+    public function generateOrders(array $ordersArray)
+    {
+        $orderObjectArray = array();
         foreach ($ordersArray as $orderItem) {
             $orderId = $orderItem['order_id'];
 
             $orderDate = $orderItem['order_date'];
             $orderDateISO = new DateTime($orderDate);
-            $orderDateISO -> format(DateTime::ATOM);
+            $orderDateISO->format(DateTime::ATOM);
 
             $customerId = $orderItem['customer']['customer_id'];
             $customerFirstName = $orderItem['customer']['first_name'];
@@ -32,24 +34,24 @@ class OrderHelper {
             $addressState = $orderItem['customer']['shipping_address']['state'];
 
             $order = new Order();
-            $order -> setOrderId($orderId);
-            $order -> setDateISO($orderDateISO);
+            $order->setOrderId($orderId);
+            $order->setDateISO($orderDateISO);
 
             $customerAddress = new CustomerAddress();
-            $customerAddress -> setStreet($addressStreet);
-            $customerAddress -> setPostcode($addressPostcode);
-            $customerAddress -> setSuburb($addressSuburb);
-            $customerAddress -> setState($addressState);
+            $customerAddress->setStreet($addressStreet);
+            $customerAddress->setPostcode($addressPostcode);
+            $customerAddress->setSuburb($addressSuburb);
+            $customerAddress->setState($addressState);
 
             $customer = new Customer();
-            $customer -> setCustomerId($customerId);
-            $customer -> setFirstName($customerFirstName);
-            $customer -> setLastName($customerLastName);
-            $customer -> setEmail($customerEmail);
-            $customer -> setPhone($customerPhone);
-            $customer -> setShippingAddress($customerAddress);
+            $customer->setCustomerId($customerId);
+            $customer->setFirstName($customerFirstName);
+            $customer->setLastName($customerLastName);
+            $customer->setEmail($customerEmail);
+            $customer->setPhone($customerPhone);
+            $customer->setShippingAddress($customerAddress);
 
-            $order -> setCustomer($customer);
+            $order->setCustomer($customer);
 
             $items = $orderItem['items'];
             $itemsObjectArray = array();
@@ -68,25 +70,25 @@ class OrderHelper {
                 $productBrandName = $item['product']['brand']['name'];
 
                 $brand = new Brand();
-                $brand -> setBrandId($productBrandId);
-                $brand -> setName($productBrandName);
+                $brand->setBrandId($productBrandId);
+                $brand->setName($productBrandName);
 
                 $product = new Product();
-                $product -> setProductId($productId);
-                $product -> setTitle($productTitle);
-                $product -> setSubtitle($productSubtitle);
-                $product -> setImage($productImage);
-                $product -> setCategory($productCategory);
-                $product -> setUrl($productUrl);
-                $product -> setGtin14($productGtin14);
-                $product -> setCreatedAt($productCreatedAt);
-                $product -> setBrand($brand);
+                $product->setProductId($productId);
+                $product->setTitle($productTitle);
+                $product->setSubtitle($productSubtitle);
+                $product->setImage($productImage);
+                $product->setCategory($productCategory);
+                $product->setUrl($productUrl);
+                $product->setGtin14($productGtin14);
+                $product->setCreatedAt($productCreatedAt);
+                $product->setBrand($brand);
 
 
                 $item = new Item();
-                $item -> setQuantity($quantity);
-                $item -> setUnitPrice($unitPrice);
-                $item -> setProduct($product);
+                $item->setQuantity($quantity);
+                $item->setUnitPrice($unitPrice);
+                $item->setProduct($product);
 
                 array_push($itemsObjectArray, $item);
             }
@@ -94,40 +96,40 @@ class OrderHelper {
             $discountObjectArray = array();
             $discounts = $orderItem['discounts'];
             foreach ($discounts as $discount) {
-            	$discountType = $discount['type'];
-            	$discountValue = $discount['value'];
-            	$discountPriority = $discount['priority'];
+                $discountType = $discount['type'];
+                $discountValue = $discount['value'];
+                $discountPriority = $discount['priority'];
 
-            	$discount = new Discount();
-            	$discount -> setType($discountType);
-            	$discount -> setValue($discountValue);
-            	$discount -> setPriority($discountPriority);
+                $discount = new Discount();
+                $discount->setType($discountType);
+                $discount->setValue($discountValue);
+                $discount->setPriority($discountPriority);
 
-            	array_push($discountObjectArray, $discount);
+                array_push($discountObjectArray, $discount);
             }
             $shippingPrice = $orderItem['shipping_price'];
 
-            $order -> setItems($itemsObjectArray);
-            $order -> setDiscounts($discountObjectArray);
-            $order -> setShippingPrice($shippingPrice);
-            $totalValue = $order -> calculateTotalValue();
-			$order -> setTotalValue($totalValue);
+            $order->setItems($itemsObjectArray);
+            $order->setDiscounts($discountObjectArray);
+            $order->setShippingPrice($shippingPrice);
+            $totalValue = $order->calculateTotalValue();
+            $order->setTotalValue($totalValue);
 
-			$averagePrice = $order -> calculateAveragePrice();
-			$order -> setAveragePrice($averagePrice);
+            $averagePrice = $order->calculateAveragePrice();
+            $order->setAveragePrice($averagePrice);
 
-			
-			$distinctUnit = $order -> countDistinctUnit();
-			$order -> setDistinctUnit($distinctUnit);
 
-			$totalUnit = $order -> calculateTotalUnit();
-			$order -> setTotalUnit($totalUnit);
+            $distinctUnit = $order->countDistinctUnit();
+            $order->setDistinctUnit($distinctUnit);
 
-			if($totalValue!=0) {
-            	array_push($orderObjectArray, $order);
-			}
+            $totalUnit = $order->calculateTotalUnit();
+            $order->setTotalUnit($totalUnit);
+
+            if ($totalValue != 0) {
+                array_push($orderObjectArray, $order);
+            }
         }
 
         return $orderObjectArray;
-	}
+    }
 }
