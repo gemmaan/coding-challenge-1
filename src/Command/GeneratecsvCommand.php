@@ -37,6 +37,7 @@ class GeneratecsvCommand extends Command
         $io -> note('creating CSV...');
         $orderHelper = new OrderHelper();
         $orderObjectArray = $orderHelper -> generateOrders($ordersArray);
+        // var_dump($orderObjectArray);
         $csvHelper = new CSVHelper();
         $exportableArray = $csvHelper -> generateExportableOrder($orderObjectArray);
 

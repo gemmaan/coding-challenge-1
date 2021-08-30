@@ -157,6 +157,7 @@ class Order
             $totalValue = $totalValue + $itemTotalPrice;
         }
 
+        $this -> sortDiscountsByPriority();
         foreach ($this->discounts as $discount) {
             $discountType = $discount -> getType();
             $discountValue = $discount -> getValue();
@@ -251,5 +252,16 @@ class Order
         }
 
         return $totalUnit;
+    }
+
+    public function sortDiscountsByPriority() {
+        usort($this->discounts, function($a, $b) {
+            if ($a->getPriority() == $b->getPriority()) {
+                return (0);
+            }
+            return (($a->getPriority() < $b->getPriority()) ? -1 : 1);
+        });
+        
+        return $this->discounts;
     }
 }

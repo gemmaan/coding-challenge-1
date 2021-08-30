@@ -101,7 +101,7 @@ class OrderHelper {
             	$discount = new Discount();
             	$discount -> setType($discountType);
             	$discount -> setValue($discountValue);
-            	$discount -> setValue($discountPriority);
+            	$discount -> setPriority($discountPriority);
 
             	array_push($discountObjectArray, $discount);
             }
