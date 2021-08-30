@@ -38,13 +38,6 @@ class MainController extends AbstractController
         header('Content-Type: application/csv');
         header('Content-Disposition: attachment; filename="out.csv"');
 
-        $list = array(
-            ['Name', 'age', 'Gender'],
-            ['Bob', 20, 'Male'],
-            ['John', 25, 'Male'],
-            ['Jessica', 30, 'Female']
-        );
-
         $jsonReader = new JSONLinesReader();
         $ordersArray = $jsonReader -> readJSONLines('https://s3-ap-southeast-2.amazonaws.com/catch-code-challenge/challenge-1-in.jsonl');
 

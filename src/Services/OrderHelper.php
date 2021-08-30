@@ -120,6 +120,9 @@ class OrderHelper {
 			$distinctUnit = $order -> countDistinctUnit();
 			$order -> setDistinctUnit($distinctUnit);
 
+			$totalUnit = $order -> calculateTotalUnit();
+			$order -> setTotalUnit($totalUnit);
+
 			if($totalValue!=0) {
             	array_push($orderObjectArray, $order);
 			}

@@ -10,6 +10,5 @@ class JSONLinesReader {
         $ordersArray = json_decode($ordersJsonString, true);
 
         return $ordersArray;
-
 	}
 }

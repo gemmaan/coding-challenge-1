@@ -68,6 +68,11 @@ class Order
      */
     private $dateISO;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $totalUnit;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -225,5 +230,26 @@ class Order
         $this->dateISO = $dateISO;
 
         return $this;
+    }
+
+    public function getTotalUnit(): ?int
+    {
+        return $this->totalUnit;
+    }
+
+    public function setTotalUnit(?int $totalUnit): self
+    {
+        $this->totalUnit = $totalUnit;
+
+        return $this;
+    }
+
+    public function calculateTotalUnit() {
+        $totalUnit = 0;
+        foreach ($this->items as $item) {
+            $totalUnit = $totalUnit + $item->getQuantity();
+        }
+
+        return $totalUnit;
     }
 }
